@@ -16,7 +16,7 @@ async def search_event(
     Search for events by shower code or region, optionally filtered by date range
     """
     return await handle_search_event(
-        search_query=searchQuery,
+        searchQuery=searchQuery,
         start_date=start,
         end_date=end
     )
