@@ -21,14 +21,18 @@ export const getMeteorTrajectory = async (
   return null;
 };
 
+export type MeteorTrajByIdResponse = IMeteorTrajectory & {
+  velocity_curve: { t: number; v: number }[];
+  event_id: string;
+};
 export const getMeteorTrajectoryByTrajId = async (
   id: string,
-): Promise<IMeteorTrajectory | null> => {
+): Promise<MeteorTrajByIdResponse | null> => {
   try {
     const response = await apiClient.get(`/trajectory/${id}`);
 
     console.log(response.data);
-    return response.data as IMeteorTrajectory;
+    return response.data as MeteorTrajByIdResponse;
   } catch (e) {
     console.error(e);
   }

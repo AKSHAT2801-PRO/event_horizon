@@ -16,6 +16,7 @@ import {
   getMeteorTrajectory,
   getMeteorTrajectoryByTrajId,
   getRandomMeteorTrajectory,
+  MeteorTrajByIdResponse,
 } from "@/lib/api/meteor";
 import { IMeteorTrajectory } from "@/types/api/meteor";
 import { useSearchParams } from "next/navigation";
@@ -208,17 +209,6 @@ function SceneRaycaster({ meteorData, trackedMeteors, onHit }: RaycasterProps) {
   return null;
 }
 
-const DUMMY_CURVE = [
-  { t: 0.0, v: 19.94 },
-  { t: 0.2, v: 18.5 },
-  { t: 0.4, v: 16.2 },
-  { t: 0.6, v: 13.8 },
-  { t: 0.8, v: 10.1 },
-  { t: 1.0, v: 6.3 },
-  { t: 1.2, v: 3.1 },
-  { t: 1.4, v: 1.2 },
-];
-
 const chartConfig = {
   v: { label: "Velocity", color: "rgba(96,165,250,0.8)" },
 } satisfies ChartConfig;
@@ -226,7 +216,7 @@ const chartConfig = {
 // ─── Hit info tooltip ─────────────────────────────────────────────────────────
 function HitTooltip({ hit, onClose }: { hit: HitInfo; onClose: () => void }) {
   const [state, setState] = useState<{
-    data: IMeteorTrajectory | null;
+    data: MeteorTrajByIdResponse | null;
     loading: boolean;
   }>({ data: null, loading: true });
 
@@ -269,6 +259,7 @@ function HitTooltip({ hit, onClose }: { hit: HitInfo; onClose: () => void }) {
           <span className="text-[10px] text-red-400 font-mono">not found</span>
         ) : (
           <div className="space-y-1">
+            <Row label="id" value={`${data.event_id}`} />
             <Row label="mass" value={`${data.mass.toExponential(2)} kg`} />
             <Row
               label="velocity"
@@ -286,7 +277,7 @@ function HitTooltip({ hit, onClose }: { hit: HitInfo; onClose: () => void }) {
                 className="h-16 w-full mt-1 aspect-auto"
               >
                 <AreaChart
-                  data={DUMMY_CURVE}
+                  data={data.velocity_curve}
                   margin={{ top: 2, right: 2, bottom: 0, left: 0 }}
                 >
                   <defs>
