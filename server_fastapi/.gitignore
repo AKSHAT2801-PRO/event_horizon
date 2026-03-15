@@ -89,3 +89,5 @@ dmypy.json
 .pyre/
 
 ../log.txt
+.vercel
+.env*.local
